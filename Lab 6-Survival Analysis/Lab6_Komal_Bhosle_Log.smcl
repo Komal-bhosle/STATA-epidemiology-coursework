@@ -1,0 +1,250 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\komal\OneDrive\Desktop\Advanced Epidemiology\Lab6_Komal_Bhosle_Log.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}24 Nov 2025, 16:00:59
+{txt}
+{com}. 
+. //Examining the dataset
+. describe
+
+{txt}Contains data from {res}Lab6_Survival_Analysis_dataset.dta
+{txt} Observations:{res}           121                  
+{txt}    Variables:{res}             8                  19 Mar 2024 12:44
+{txt}{hline}
+Variable      Storage   Display    Value
+    name         type    format    label      Variable label
+{hline}
+{p 0 48}{res}{bind:newdrug        }{txt}{bind: byte    }{bind:%8.0g     }{space 1}{bind:yn       }{bind:  }{res}{res}New drug administered. 1=yes, 0=no{p_end}
+{p 0 48}{bind:age            }{txt}{bind: float   }{bind:%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Age at admission (years){p_end}
+{p 0 48}{bind:asthma         }{txt}{bind: byte    }{bind:%8.0g     }{space 1}{bind:yn       }{bind:  }{res}{res}Patient diagnosed with asthma. 1=yes, 0=no{p_end}
+{p 0 48}{bind:outpt_follow   }{txt}{bind: byte    }{bind:%8.0g     }{space 1}{bind:yn       }{bind:  }{res}{res}Patient received outpatient follow-up after hospitalization. 1=yes, 0=no{p_end}
+{p 0 48}{bind:rehosp_mos     }{txt}{bind: float   }{bind:%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Months after hospitalization to next hospitalization{p_end}
+{p 0 48}{bind:id             }{txt}{bind: int     }{bind:%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}{p_end}
+{p 0 48}{bind:rehosp         }{txt}{bind: float   }{bind:%9.0g     }{space 1}{bind:yn       }{bind:  }{res}{res}{p_end}
+{p 0 48}{bind:random         }{txt}{bind: float   }{bind:%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}{p_end}
+{txt}{hline}
+Sorted by: 
+     Note: {res}Dataset has changed since last saved.
+{txt}
+{com}. list in 1/10
+{txt}
+     {c TLC}{hline 9}{c -}{hline 10}{c -}{hline 8}{c -}{hline 10}{c -}{hline 10}{c -}{hline 4}{c -}{hline 8}{c -}{hline 10}{c TRC}
+     {c |} {res}newdrug        age   asthma   outpt_~w   rehosp~s   id   rehosp     random {txt}{c |}
+     {c LT}{hline 9}{c -}{hline 10}{c -}{hline 8}{c -}{hline 10}{c -}{hline 10}{c -}{hline 4}{c -}{hline 8}{c -}{hline 10}{c RT}
+  1. {c |} {res}    yes   13.36917      yes        yes   9.065276    1      yes   .8892882 {txt}{c |}
+  2. {c |} {res}     no   16.73229       no        yes   8.062572    2      yes   .3706957 {txt}{c |}
+  3. {c |} {res}     no   19.50848       no        yes   7.063169    5      yes   .7177414 {txt}{c |}
+  4. {c |} {res}    yes   19.71252       no        yes   11.54883    6      yes   .5668986 {txt}{c |}
+  5. {c |} {res}     no   19.84277      yes        yes   4.125666    7      yes   .7686999 {txt}{c |}
+     {c LT}{hline 9}{c -}{hline 10}{c -}{hline 8}{c -}{hline 10}{c -}{hline 10}{c -}{hline 4}{c -}{hline 8}{c -}{hline 10}{c RT}
+  6. {c |} {res}    yes   17.40731       no         no   5.017306    9      yes   .7234821 {txt}{c |}
+  7. {c |} {res}    yes   17.40192       no        yes   8.392355   10      yes   .8364566 {txt}{c |}
+  8. {c |} {res}    yes   16.72997      yes         no   9.619246   11      yes   .5653779 {txt}{c |}
+  9. {c |} {res}    yes    20.4383      yes         no   6.974686   13      yes   .5612067 {txt}{c |}
+ 10. {c |} {res}     no   17.79363      yes         no   9.972171   14       no   .3374369 {txt}{c |}
+     {c BLC}{hline 9}{c -}{hline 10}{c -}{hline 8}{c -}{hline 10}{c -}{hline 10}{c -}{hline 4}{c -}{hline 8}{c -}{hline 10}{c BRC}
+
+{com}. tab newdrug
+
+   {txt}New drug {c |}
+administere {c |}
+  d. 1=yes, {c |}
+       0=no {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+         no {c |}{res}         63       52.07       52.07
+{txt}        yes {c |}{res}         58       47.93      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}        121      100.00
+{txt}
+{com}. tab rehosp
+
+     {txt}rehosp {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+         no {c |}{res}          4        3.31        3.31
+{txt}        yes {c |}{res}        117       96.69      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}        121      100.00
+{txt}
+{com}. 
+. //To tell stata that this is a survival sample
+. stset rehosp_mos, failure(rehosp)
+
+{txt}Survival-time data settings
+
+{col 10}Failure event: {res}rehosp!=0 & rehosp<.
+{col 1}{txt}Observed time interval: {res}(0, rehosp_mos]
+{col 6}{txt}Exit on or before: {res}failure
+
+{txt}{hline 74}
+{res}        121{txt}  total observations
+{res}          0{txt}  exclusions
+{hline 74}
+{res}        121{txt}  observations remaining, representing
+{res}        117{txt}  failures in single-record/single-failure data
+{res}  1,004.894{txt}  total analysis time at risk and under observation
+                                                At risk from t = {res}        0
+                                     {txt}Earliest observed entry t = {res}        0
+                                          {txt}Last observed exit t = {res} 20.69765
+{txt}
+{com}. 
+. //Now we create a lifetable for the full sample
+. ltable rehosp_mos rehosp
+
+{txt}{col 18}Beg.{col 55}Std.
+{col 4}Interval{col 17}total{col 25}Deaths{col 34}Lost{col 41}Survival{col 54}error{col 61}   [95% conf. int.]
+{hline 79}
+    0     1{res}       121        2      0     0.9835    0.0116     0.9355    0.9958
+{txt}    1     2{res}       119        6      0     0.9339    0.0226     0.8721    0.9664
+{txt}    2     3{res}       113        6      1     0.8841    0.0291     0.8121    0.9297
+{txt}    3     4{res}       106        2      0     0.8674    0.0309     0.7927    0.9166
+{txt}    4     5{res}       104        5      0     0.8257    0.0346     0.7453    0.8827
+{txt}    5     6{res}        99       10      2     0.7414    0.0400     0.6531    0.8105
+{txt}    6     7{res}        87       13      0     0.6307    0.0443     0.5372    0.7103
+{txt}    7     8{res}        74       17      0     0.4858    0.0460     0.3931    0.5721
+{txt}    8     9{res}        57       11      0     0.3920    0.0450     0.3041    0.4788
+{txt}    9    10{res}        46        9      1     0.3145    0.0429     0.2329    0.3992
+{txt}   10    11{res}        36        7      0     0.2533    0.0403     0.1785    0.3348
+{txt}   11    12{res}        29        9      0     0.1747    0.0353     0.1120    0.2490
+{txt}   12    13{res}        20        2      0     0.1572    0.0339     0.0979    0.2293
+{txt}   13    14{res}        18        7      0     0.0961    0.0275     0.0510    0.1582
+{txt}   14    15{res}        11        3      0     0.0699    0.0238     0.0327    0.1261
+{txt}   15    16{res}         8        2      0     0.0524    0.0208     0.0215    0.1038
+{txt}   16    17{res}         6        2      0     0.0349    0.0171     0.0115    0.0806
+{txt}   17    18{res}         4        1      0     0.0262    0.0149     0.0071    0.0685
+{txt}   19    20{res}         3        1      0     0.0175    0.0122     0.0034    0.0560
+{txt}   20    21{res}         2        2      0     0.0000         .          .         .
+{txt}{hline 79}
+
+{com}. 
+. //Now we determine median survival time
+. stsum
+
+{col 9}{txt}Failure {bf:_d}: {res}rehosp
+{col 3}{txt}Analysis time {bf:_t}: {res}rehosp_mos
+
+{txt}{col 10}{c |}{col 26}Incidence{col 40}Number of{col 52}{c LT}{hline 6} Survival time {hline 5}{c RT}
+        {col 10}{c |} Time at risk{col 31}rate{col 41}subjects{col 57}25%{col 67}50%{col 77}75%
+{hline 9}{c +}{hline 69}
+   Total {c |} {res} 1,004.89398   .1164302{col 40}      121   5.942448  7.857359  11.03023
+{txt}
+{com}. 
+. //Create a survival curve graph and include confidence intervals
+. sts graph, ci
+
+{col 9}{txt}Failure {bf:_d}: {res}rehosp
+{col 3}{txt}Analysis time {bf:_t}: {res}rehosp_mos
+{txt}
+{com}. 
+. //Now we create survival curve comparing those who received the new drug to those who did not.
+. sts graph, by(newdrug) ci
+
+{col 9}{txt}Failure {bf:_d}: {res}rehosp
+{col 3}{txt}Analysis time {bf:_t}: {res}rehosp_mos
+{txt}
+{com}. 
+. //Determine the median survival times for each treatment group.
+. stsum, by(newdrug)
+
+{col 9}{txt}Failure {bf:_d}: {res}rehosp
+{col 3}{txt}Analysis time {bf:_t}: {res}rehosp_mos
+
+{txt}{col 10}{c |}{col 26}Incidence{col 40}Number of{col 52}{c LT}{hline 6} Survival time {hline 5}{c RT}
+ newdrug{col 10}{c |} Time at risk{col 31}rate{col 41}subjects{col 57}25%{col 67}50%{col 77}75%
+{hline 9}{c +}{hline 69}
+      no {c |} {res} 380.1811213   .1551892{col 40}       63   4.107067  6.566666  7.958324
+     {txt}yes {c |} {res} 624.7128575   .0928427{col 40}       58   7.857359  10.55216  13.20411
+{txt}{hline 9}{c +}{hline 69}
+   Total {c |} {res} 1,004.89398   .1164302{col 40}      121   5.942448  7.857359  11.03023
+{txt}
+{com}. 
+. //to know if the new drug is associated with more time until the next hospitalization.
+. sts test newdrug, logrank
+
+{col 9}{txt}Failure {bf:_d}: {res}rehosp
+{col 3}{txt}Analysis time {bf:_t}: {res}rehosp_mos
+
+{txt}Equality of survivor functions
+Log-rank test
+
+{col 8} {c |}  Observed       Expected
+newdrug {c |}    events         events
+{hline 8}{c +}{hline 25}
+     no {c |}{res}        59          30.01
+    {txt}yes {c |}{res}        58          86.99
+{txt}{hline 8}{c +}{hline 25}
+  Total {c |}{res}       117         117.00
+
+                  {txt}chi2(1) =  {res}43.74
+                  {txt}Pr>chi2 = {res}0.0000
+{txt}
+{com}. 
+. //To check if being administered with new drug predict time until next hospitalization
+. stcox newdrug
+
+{col 9}{txt}Failure {bf:_d}: {res}rehosp
+{col 3}{txt}Analysis time {bf:_t}: {res}rehosp_mos
+
+{txt}Iteration 0:  Log likelihood = {res}-445.22299
+{txt}Iteration 1:  Log likelihood = {res}-425.58446
+{txt}Iteration 2:  Log likelihood = {res}-425.30547
+{txt}Iteration 3:  Log likelihood = {res}-425.30542
+{txt}Refining estimates:
+Iteration 0:  Log likelihood = {res}-425.30542
+
+{txt}Cox regression with no ties
+
+No. of subjects = {res}{ralign 9:121}{col 57}{txt}{lalign 13:Number of obs} = {res}{ralign 6:121}
+{txt}No. of failures = {res}{ralign 9:117}
+{txt}Time at risk    = {res}{ralign 9:1,004.894}
+{col 57}{txt}{lalign 13:LR chi2({res:1})} = {res}{ralign 6:39.84}
+{txt}Log likelihood = {res}-425.30542{col 57}{txt}{lalign 13:Prob > chi2} = {res}{ralign 6:0.0000}
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}          _t{col 14}{c |} Haz. ratio{col 26}   Std. err.{col 38}      z{col 46}   P>|z|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 5}newdrug {c |}{col 14}{res}{space 2} .2597258{col 26}{space 2} .0557805{col 37}{space 1}   -6.28{col 46}{space 3}0.000{col 54}{space 4} .1704924{col 67}{space 3} .3956627
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. 
+. //To predict if age, asthma diagnoisis and receipt of outpatient follow-up care predict time until next hospitalization (with new drug in the model)
+. stcox newdrug age asthma outpt_follow
+
+{col 9}{txt}Failure {bf:_d}: {res}rehosp
+{col 3}{txt}Analysis time {bf:_t}: {res}rehosp_mos
+
+{txt}Iteration 0:  Log likelihood = {res}-445.22299
+{txt}Iteration 1:  Log likelihood = {res}-414.46545
+{txt}Iteration 2:  Log likelihood = {res}-414.25866
+{txt}Iteration 3:  Log likelihood = {res}-414.25863
+{txt}Refining estimates:
+Iteration 0:  Log likelihood = {res}-414.25863
+
+{txt}Cox regression with no ties
+
+No. of subjects = {res}{ralign 9:121}{col 57}{txt}{lalign 13:Number of obs} = {res}{ralign 6:121}
+{txt}No. of failures = {res}{ralign 9:117}
+{txt}Time at risk    = {res}{ralign 9:1,004.894}
+{col 57}{txt}{lalign 13:LR chi2({res:4})} = {res}{ralign 6:61.93}
+{txt}Log likelihood = {res}-414.25863{col 57}{txt}{lalign 13:Prob > chi2} = {res}{ralign 6:0.0000}
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}          _t{col 14}{c |} Haz. ratio{col 26}   Std. err.{col 38}      z{col 46}   P>|z|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 5}newdrug {c |}{col 14}{res}{space 2} .2124816{col 26}{space 2} .0472018{col 37}{space 1}   -6.97{col 46}{space 3}0.000{col 54}{space 4} .1374773{col 67}{space 3} .3284064
+{txt}{space 9}age {c |}{col 14}{res}{space 2} 1.103553{col 26}{space 2} .0547598{col 37}{space 1}    1.99{col 46}{space 3}0.047{col 54}{space 4} 1.001279{col 67}{space 3} 1.216272
+{txt}{space 6}asthma {c |}{col 14}{res}{space 2} 1.790185{col 26}{space 2} .3723344{col 37}{space 1}    2.80{col 46}{space 3}0.005{col 54}{space 4} 1.190857{col 67}{space 3} 2.691141
+{txt}outpt_follow {c |}{col 14}{res}{space 2} .6049539{col 26}{space 2} .1324535{col 37}{space 1}   -2.30{col 46}{space 3}0.022{col 54}{space 4} .3938704{col 67}{space 3} .9291615
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. 
+. //Closing the log file
+. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\komal\OneDrive\Desktop\Advanced Epidemiology\Lab6_Komal_Bhosle_Log.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}24 Nov 2025, 16:01:01
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}
