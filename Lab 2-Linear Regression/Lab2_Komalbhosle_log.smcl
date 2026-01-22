@@ -1,0 +1,100 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\komal\OneDrive\Desktop\Advanced Epidemiology\Lab2_Komalbhosle_v2_log.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}27 Sep 2025, 06:01:31
+{txt}
+{com}. 
+. //Examine the dataset
+. summarize
+
+{txt}    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 3}partic_ID {c |}{res}     23,537    26721.11    17104.28          3      53623
+{txt}{space 3}walk_mile {c |}{res}      2,546    6.242145    4.708271          1         25
+{txt}lessactive~s {c |}{res}     14,357    .3011075    .4587553          0          1
+{txt}{space 4}medicare {c |}{res}      5,341     .537727    .4986213          0          1
+{txt}{space 9}age {c |}{res}     23,537    29.76709    23.22475          1         79
+{txt}{hline 13}{c +}{hline 57}
+{space 6}random {c |}{res}     23,537    .5995609    .2292572   .2000861   .9999818
+{txt}
+{com}. describe
+
+{txt}Contains data from {res}regression_lab.dta
+{txt} Observations:{res}        23,537                  
+{txt}    Variables:{res}             6                  10 Feb 2024 20:40
+{txt}{hline}
+Variable      Storage   Display    Value
+    name         type    format    label      Variable label
+{hline}
+{p 0 48}{res}{bind:partic_ID      }{txt}{bind: double  }{bind:%12.0g    }{space 1}{bind:         }{bind:  }{res}{res}Sample person identification number{p_end}
+{p 0 48}{bind:walk_mile      }{txt}{bind: float   }{bind:%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}How many miles do you walk per week?{p_end}
+{p 0 48}{bind:lessactive_ot~s}{txt}{bind: float   }{bind:%9.0g     }{space 1}{bind:yn       }{bind:  }{res}{res}Do you think you are less active than other people your age? (0=no, 1=yes){p_end}
+{p 0 48}{bind:medicare       }{txt}{bind: float   }{bind:%9.0g     }{space 1}{bind:yn       }{bind:  }{res}{res}Do you have Medicare insurance?{p_end}
+{p 0 48}{bind:age            }{txt}{bind: float   }{bind:%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}age in years{p_end}
+{p 0 48}{bind:random         }{txt}{bind: float   }{bind:%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}{p_end}
+{txt}{hline}
+Sorted by: {res}partic_ID
+{txt}     Note: {res}Dataset has changed since last saved.
+{txt}
+{com}. 
+. //Examine the variables
+. tab medicare
+
+{txt}Do you have {c |}
+   Medicare {c |}
+ insurance? {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+         no {c |}{res}      2,469       46.23       46.23
+{txt}        yes {c |}{res}      2,872       53.77      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}      5,341      100.00
+{txt}
+{com}. 
+. //Determine if there is association between miles walked per week and medicare enrollment
+. regress walk_mile medicare
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}       728
+{txt}{hline 13}{c +}{hline 34}   F(1, 726)       = {res}    12.96
+{txt}       Model {c |} {res} 277.014227         1  277.014227   {txt}Prob > F        ={res}    0.0003
+{txt}    Residual {c |} {res}  15516.947       726  21.3732052   {txt}R-squared       ={res}    0.0175
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.0162
+{txt}       Total {c |} {res} 15793.9612       727  21.7248435   {txt}Root MSE        =   {res} 4.6231
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}   walk_mile{col 14}{c |} Coefficient{col 26}  Std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}medicare {c |}{col 14}{res}{space 2} 1.254511{col 26}{space 2} .3484642{col 37}{space 1}    3.60{col 46}{space 3}0.000{col 54}{space 4} .5703929{col 67}{space 3} 1.938628
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 6.381395{col 26}{space 2} .2229465{col 37}{space 1}   28.62{col 46}{space 3}0.000{col 54}{space 4} 5.943699{col 67}{space 3} 6.819092
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. 
+. //Determine if age makes a difference in this model
+. regress walk_mile medicare age
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}       728
+{txt}{hline 13}{c +}{hline 34}   F(2, 725)       = {res}     6.47
+{txt}       Model {c |} {res} 277.061766         2  138.530883   {txt}Prob > F        ={res}    0.0016
+{txt}    Residual {c |} {res} 15516.8994       725  21.4026199   {txt}R-squared       ={res}    0.0175
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.0148
+{txt}       Total {c |} {res} 15793.9612       727  21.7248435   {txt}Root MSE        =   {res} 4.6263
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}   walk_mile{col 14}{c |} Coefficient{col 26}  Std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 4}medicare {c |}{col 14}{res}{space 2} 1.275596{col 26}{space 2} .5672413{col 37}{space 1}    2.25{col 46}{space 3}0.025{col 54}{space 4} .1619648{col 67}{space 3} 2.389228
+{txt}{space 9}age {c |}{col 14}{res}{space 2}-.0006515{col 26}{space 2}  .013824{col 37}{space 1}   -0.05{col 46}{space 3}0.962{col 54}{space 4}-.0277915{col 67}{space 3} .0264884
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 6.404976{col 26}{space 2} .5478208{col 37}{space 1}   11.69{col 46}{space 3}0.000{col 54}{space 4} 5.329471{col 67}{space 3}  7.48048
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. 
+. //Save the log file
+. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\komal\OneDrive\Desktop\Advanced Epidemiology\Lab2_Komalbhosle_v2_log.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}27 Sep 2025, 06:01:32
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}
