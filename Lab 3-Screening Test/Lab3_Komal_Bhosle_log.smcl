@@ -1,0 +1,94 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\komal\OneDrive\Desktop\Advanced Epidemiology\Lab3_Komal Bhosle_log.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}29 Sep 2025, 18:47:35
+{txt}
+{com}. 
+. //loading file details
+. summarize
+
+{txt}    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 5}student {c |}{res}         64     10.3125    4.959759          1         18
+{txt}{space 2}comparison {c |}{res}         64       10.25    5.351161          1         20
+{txt}{space 6}object {c |}{res}          0
+{txt}{space 7}heavy {c |}{res}         64     .390625    .4917474          0          1
+{txt}{space 2}heavy_true {c |}{res}         64     .421875    .4977629          0          1
+{txt}
+{com}. describe
+
+{txt}Contains data from {res}combined_class_data_250929.dta
+{txt} Observations:{res}            64                  
+{txt}    Variables:{res}             5                  29 Sep 2025 13:36
+{txt}{hline}
+Variable      Storage   Display    Value
+    name         type    format    label      Variable label
+{hline}
+{p 0 48}{res}{bind:student        }{txt}{bind: float   }{bind:%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}student number{p_end}
+{p 0 48}{bind:comparison     }{txt}{bind: float   }{bind:%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Comparison number{p_end}
+{p 0 48}{bind:object         }{txt}{bind: str1    }{bind:%9s       }{space 1}{bind:         }{bind:  }{res}{res}envelope{p_end}
+{p 0 48}{bind:heavy          }{txt}{bind: float   }{bind:%13.0g    }{space 1}{bind:more_lbl }{bind:  }{res}{res}envelope heavier than spoon: 1=yes, 0=no{p_end}
+{p 0 48}{bind:heavy_true     }{txt}{bind: byte    }{bind:%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}{p_end}
+{txt}{hline}
+Sorted by: 
+
+{com}. 
+. //calculate sensitivity and specificity
+. roctab heavy heavy_true
+{res}
+{txt}{col 23}ROC{col 32}{col 46}{space 1}Asymptotic normal{space 2}
+           Obs       area     Std. err.      [95% conf. interval]
+     {hline 60}
+{col 5}{res}        64{col 18}  0.8759{col 31}  0.0428{col 46} 0.79193{col 58} 0.95986
+{txt}
+{com}. 
+. //install a command only once to run diagt commands
+. ssc install diagt
+{txt}checking {hilite:diagt} consistency and verifying not already installed...
+all files already exist and are up to date.
+
+{com}. 
+. //calculate positive predictive value and negative predictive value
+. diagt heavy heavy_true
+
+  {txt}envelope {c |}
+   heavier {c |}
+      than {c |}
+    spoon: {c |}
+    1=yes, {c |}      heavy_true
+      0=no {c |}      Pos.       Neg. {c |}     Total
+{hline 11}{c +}{hline 22}{c +}{hline 10}
+  Abnormal {c |}{res}        22          3 {txt}{c |}{res}        25 
+{txt}    Normal {c |}{res}         5         34 {txt}{c |}{res}        39 
+{txt}{hline 11}{c +}{hline 22}{c +}{hline 10}
+     Total {c |}{res}        27         37 {txt}{c |}{res}        64 
+{txt}True abnormal diagnosis defined as heavy = 1
+
+
+{col 51}[95% Confidence Interval]
+---------------------------------------------------------------------------
+Prevalence                         Pr(A){col 44}{res}  39.1%{col 54}  27.1%{col 65}  52.1%
+{txt}---------------------------------------------------------------------------
+Sensitivity                      Pr(+|A){col 44}{res}  88.0%{col 54}  68.8%{col 64}  97.5%
+{txt}Specificity                      Pr(-|N){col 44}{res}  87.2%{col 54}  72.6%{col 64}  95.7%
+{txt}ROC area               (Sens. + Spec.)/2{col 46}{res} 0.88{col 56} 0.79{col 66} 0.96 {txt}
+---------------------------------------------------------------------------
+Likelihood ratio (+)     Pr(+|A)/Pr(+|N){col 45}{res}  6.86{col 55}  2.99{col 65} 15.76{txt} 
+Likelihood ratio (-)     Pr(-|A)/Pr(-|N){col 45}{res}  0.14{col 55}  0.05{col 65}  0.40{txt} 
+Odds ratio                   LR(+)/LR(-){col 44}{res}  49.87{col 55} 11.26{col 63}  218.18{txt} 
+Positive predictive value        Pr(A|+){col 44}{res}  81.5%{col 54}  61.9%{col 64}  93.7% {txt}
+Negative predictive value        Pr(N|-){col 44}{res}  91.9%{col 54}  78.1%{col 64}  98.3% {txt}
+---------------------------------------------------------------------------
+
+{com}. 
+. //log close
+. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\komal\OneDrive\Desktop\Advanced Epidemiology\Lab3_Komal Bhosle_log.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}29 Sep 2025, 18:47:36
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}
