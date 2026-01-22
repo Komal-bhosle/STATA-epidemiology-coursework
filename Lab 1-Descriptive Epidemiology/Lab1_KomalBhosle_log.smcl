@@ -1,0 +1,148 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\komal\OneDrive\Desktop\Advanced Epidemiology\Lab1_KomalBhosle_log.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}22 Sep 2025, 18:10:59
+{txt}
+{com}. 
+. //set the seed
+. set seed 00912059
+{txt}
+{com}. 
+. drop random
+{txt}
+{com}. //creating random variable
+. g random = runiform()
+{txt}
+{com}. 
+. //drop 20% of observations
+. drop if random <.2
+{txt}(24 observations deleted)
+
+{com}. 
+. //get number of observations, Mean, Sd's, Min, Max
+. summarize
+
+{txt}    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 10}id {c |}{res}         97    88.57732    44.87014         11        160
+{txt}{space 8}sick {c |}{res}         97    .4948454    .5025707          0          1
+{txt}{space 5}exposed {c |}{res}         97    .2061856    .4066669          0          1
+{txt}{space 6}months {c |}{res}         97    6.113402    2.757098          2         11
+{txt}{space 6}random {c |}{res}         97    .5912903    .2120807   .2045442   .9699608
+{txt}
+{com}. describe
+
+{txt}Contains data from {res}Lab1_incidence.dta
+{txt} Observations:{res}            97                  
+{txt}    Variables:{res}             5                  22 Sep 2025 18:10
+{txt}{hline}
+Variable      Storage   Display    Value
+    name         type    format    label      Variable label
+{hline}
+{p 0 48}{res}{bind:id             }{txt}{bind: float   }{bind:%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}{p_end}
+{p 0 48}{bind:sick           }{txt}{bind: byte    }{bind:%8.0g     }{space 1}{bind:sick_lnl }{bind:  }{res}{res}2 quantiles of uniform(){p_end}
+{p 0 48}{bind:exposed        }{txt}{bind: float   }{bind:%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}{p_end}
+{p 0 48}{bind:months         }{txt}{bind: float   }{bind:%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}{p_end}
+{p 0 48}{bind:random         }{txt}{bind: float   }{bind:%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}{p_end}
+{txt}{hline}
+Sorted by: 
+     Note: {res}Dataset has changed since last saved.
+{txt}
+{com}. 
+. //look at distribution of variables
+. tab sick
+
+{txt}2 quantiles {c |}
+         of {c |}
+  uniform() {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+          0 {c |}{res}         49       50.52       50.52
+{txt}          1 {c |}{res}         48       49.48      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}         97      100.00
+{txt}
+{com}. tab exposed
+
+    {txt}exposed {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+          0 {c |}{res}         77       79.38       79.38
+{txt}          1 {c |}{res}         20       20.62      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}         97      100.00
+{txt}
+{com}. 
+. //2x2 table
+. tab sick exposed
+
+         {txt}2 {c |}
+ quantiles {c |}
+        of {c |}        exposed
+ uniform() {c |}         0          1 {c |}     Total
+{hline 11}{c +}{hline 22}{c +}{hline 10}
+         0 {c |}{res}        45          4 {txt}{c |}{res}        49 
+{txt}         1 {c |}{res}        32         16 {txt}{c |}{res}        48 
+{txt}{hline 11}{c +}{hline 22}{c +}{hline 10}
+     Total {c |}{res}        77         20 {txt}{c |}{res}        97 
+{txt}
+{com}. 
+. //calculate cumulative incidence
+. cs sick exposed
+
+{col 18}{txt}{c |}{col 27}exposed{col 43}{c |}
+{col 18}{c |}   Exposed   Unexposed  {c |}      Total
+{hline 17}{c +}{hline 24}{c +}{hline 11}
+           Cases {c |} {res}       16          32{txt}  {c |}  {res}       48
+        {txt}Noncases {c |} {res}        4          45{txt}  {c |}  {res}       49
+{txt}{hline 17}{c +}{hline 24}{c +}{hline 11}
+{col 12}Total {c |} {res}       20          77{txt}  {c |}  {res}       97
+{txt}{col 18}{c |}{col 43}{c |}
+            Risk {c |} {res}       .8    .4155844{txt}  {c |}  {res} .4948454
+{txt}{col 18}{c |}{col 43}{c |}
+{col 18}{c |}      Point estimate    {c |}    [95% conf. interval]
+{col 18}{c LT}{hline 24}{c +}{hline 24}
+ Risk difference {c |} {res}{col 27} .3844156{txt}{col 43}{c |}   {res}  .177417    .5914142{txt} 
+      Risk ratio {c |} {res}{col 27}    1.925{txt}{col 43}{c |}   {res} 1.365008    2.714727{txt} 
+ Attr. frac. ex. {c |} {res}{col 27} .4805195{txt}{col 43}{c |}   {res} .2674037    .6316389{txt} 
+ Attr. frac. pop {c |} {res}{col 27} .1601732{txt}{col 43}{c |}
+{col 18}{c BLC}{hline 24}{c BT}{hline 24}
+{col 22}          chi2(1) ={res}     9.39{txt}  Pr>chi2 ={res} 0.0022
+{txt}
+{com}. 
+. //calculate incidence rate
+. ir sick exposed months
+
+{txt}Incidence-rate comparison
+
+{col 18}{c |}{col 27}exposed{col 43}{c |}
+{col 18}{c |}   Exposed   Unexposed  {c |}      Total
+{hline 17}{c +}{hline 24}{c +}{hline 11}
+2 quantiles of u {c |} {res}       16          32{txt}  {c |}  {res}       48
+          {txt}months {c |} {res}      108         485{txt}  {c |}  {res}      593
+{txt}{hline 17}{c +}{hline 24}{c +}{hline 11}
+{col 18}{c |}{col 43}{c |}
+  Incidence rate {c |} {res} .1481481    .0659794{txt}  {c |}  {res} .0809444
+{txt}{col 18}{c |}{col 43}{c |}
+{col 18}{c |}      Point estimate    {c |}    [95% conf. interval]
+{col 18}{c LT}{hline 24}{c +}{hline 24}
+ Inc. rate diff. {c |} {res}{col 27} .0821688{txt}{col 43}{c |}   {res}  .006063    .1582745{txt} 
+ Inc. rate ratio {c |} {res}{col 27}  2.24537{txt}{col 43}{c |}   {res} 1.150608    4.214073{txt} (exact)
+ Attr. frac. ex. {c |} {res}{col 27} .5546392{txt}{col 43}{c |}   {res} .1308943    .7626999{txt} (exact)
+ Attr. frac. pop {c |} {col 27}{res} .1848797{txt}{col 43}{c |}
+{col 18}{c BLC}{hline 24}{c BT}{hline 24}
+Mid-p-values for tests of incidence-rate difference:
+  Adj Pr(Exposed 2 quantiles of u <= {res}16{txt}) ={res} 0.9938{txt} (lower one-sided)
+  Adj Pr(Exposed 2 quantiles of u >= {res}16{txt}) ={res} 0.0062{txt} (upper one-sided)
+                       Two-sided p-value ={res} 0.0123
+{txt}
+{com}. 
+. //log close
+. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\komal\OneDrive\Desktop\Advanced Epidemiology\Lab1_KomalBhosle_log.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}22 Sep 2025, 18:10:59
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}
