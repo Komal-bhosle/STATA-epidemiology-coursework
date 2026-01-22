@@ -1,0 +1,108 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\komal\OneDrive\Desktop\Advanced Epidemiology\Lab4_KomalBhosle_v2_log.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}27 Oct 2025, 15:13:49
+{txt}
+{com}. 
+. //Looking at the outcome variable in logistic regression
+. tab lessactive_other
+
+     {txt}Do you {c |}
+  think you {c |}
+   are less {c |}
+active than {c |}
+      other {c |}
+people your {c |}
+age? (0=no, {c |}
+     1=yes) {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+         no {c |}{res}     10,034       69.89       69.89
+{txt}        yes {c |}{res}      4,323       30.11      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}     14,357      100.00
+{txt}
+{com}. 
+. //Looking at the medicare variable in logistic regression
+. tab medicare
+
+{txt}Do you have {c |}
+   Medicare {c |}
+ insurance? {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+         no {c |}{res}      2,469       46.23       46.23
+{txt}        yes {c |}{res}      2,872       53.77      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}      5,341      100.00
+{txt}
+{com}. 
+. //To determine the continuous variable
+. summarize
+
+{txt}    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 3}partic_ID {c |}{res}     23,537    26721.11    17104.28          3      53623
+{txt}{space 3}walk_mile {c |}{res}      2,546    6.242145    4.708271          1         25
+{txt}lessactive~s {c |}{res}     14,357    .3011075    .4587553          0          1
+{txt}{space 4}medicare {c |}{res}      5,341     .537727    .4986213          0          1
+{txt}{space 9}age {c |}{res}     23,537    29.76709    23.22475          1         79
+{txt}{hline 13}{c +}{hline 57}
+{space 6}random {c |}{res}     23,537    .5995609    .2292572   .2000861   .9999818
+{txt}
+{com}. 
+. //To determine if there is an association between being less active than others and Medicare
+. enrollment,
+{err}command {bf}enrollment{sf} is unrecognized
+{txt}{search r(199), local:r(199);}
+
+end of do-file
+
+{search r(199), local:r(199);}
+
+{com}. do "C:\Users\komal\AppData\Local\Temp\STD57ac_000002.tmp"
+{txt}
+{com}. //To determine if there is an association between being less active than others and Medicare enrollment,
+. logistic lessactive_other medicare
+{res}
+{txt}{col 1}Logistic regression{col 57}{lalign 13:Number of obs}{col 70} = {res}{ralign 6:5,226}
+{txt}{col 57}{lalign 13:LR chi2({res:1})}{col 70} = {res}{ralign 6:11.30}
+{txt}{col 57}{lalign 13:Prob > chi2}{col 70} = {res}{ralign 6:0.0008}
+{txt}{col 1}{lalign 14:Log likelihood}{col 15} = {res}{ralign 10:-3225.7088}{txt}{col 57}{lalign 13:Pseudo R2}{col 70} = {res}{ralign 6:0.0017}
+
+{txt}{hline 18}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}lessactive_others{col 19}{c |} Odds ratio{col 31}   Std. err.{col 43}      z{col 51}   P>|z|{col 59}     [95% con{col 72}f. interval]
+{hline 18}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 9}medicare {c |}{col 19}{res}{space 2} 1.224249{col 31}{space 2} .0738134{col 42}{space 1}    3.36{col 51}{space 3}0.001{col 59}{space 4} 1.087798{col 72}{space 3} 1.377815
+{txt}{space 12}_cons {c |}{col 19}{res}{space 2} .4005764{col 31}{space 2} .0179823{col 42}{space 1}  -20.38{col 51}{space 3}0.000{col 59}{space 4} .3668376{col 72}{space 3} .4374181
+{txt}{hline 18}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 6 2}Note: {bf:_cons} estimates baseline odds{txt}.{p_end}
+
+{com}. 
+. //To determine if age makes a difference in this model
+. logistic lessactive_other medicare age
+{res}
+{txt}{col 1}Logistic regression{col 57}{lalign 13:Number of obs}{col 70} = {res}{ralign 6:5,226}
+{txt}{col 57}{lalign 13:LR chi2({res:2})}{col 70} = {res}{ralign 6:35.30}
+{txt}{col 57}{lalign 13:Prob > chi2}{col 70} = {res}{ralign 6:0.0000}
+{txt}{col 1}{lalign 14:Log likelihood}{col 15} = {res}{ralign 10:-3213.7093}{txt}{col 57}{lalign 13:Pseudo R2}{col 70} = {res}{ralign 6:0.0055}
+
+{txt}{hline 18}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}lessactive_others{col 19}{c |} Odds ratio{col 31}   Std. err.{col 43}      z{col 51}   P>|z|{col 59}     [95% con{col 72}f. interval]
+{hline 18}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 9}medicare {c |}{col 19}{res}{space 2} .8678875{col 31}{space 2} .0800206{col 42}{space 1}   -1.54{col 51}{space 3}0.124{col 59}{space 4} .7244047{col 72}{space 3}  1.03979
+{txt}{space 14}age {c |}{col 19}{res}{space 2} 1.012482{col 31}{space 2} .0025835{col 42}{space 1}    4.86{col 51}{space 3}0.000{col 59}{space 4} 1.007431{col 72}{space 3} 1.017558
+{txt}{space 12}_cons {c |}{col 19}{res}{space 2} .2389547{col 31}{space 2} .0279281{col 42}{space 1}  -12.25{col 51}{space 3}0.000{col 59}{space 4} .1900336{col 72}{space 3} .3004696
+{txt}{hline 18}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 6 2}Note: {bf:_cons} estimates baseline odds{txt}.{p_end}
+
+{com}. 
+. //log close
+. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\komal\OneDrive\Desktop\Advanced Epidemiology\Lab4_KomalBhosle_v2_log.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}27 Oct 2025, 15:14:30
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}
