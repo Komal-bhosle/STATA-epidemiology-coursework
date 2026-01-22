@@ -2,7 +2,7 @@
 This repository contains laboratory assignments completed as part of an Advanced Epidemiology course during my MPH program.
 
 Each Lab Includes:
-A '.dp' file with annotated stata code
+A '.do' file with annotated stata code
 A '.log' file showing analytical output
 A written interpretation of results
 
