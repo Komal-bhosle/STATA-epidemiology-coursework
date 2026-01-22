@@ -1,0 +1,126 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\komal\OneDrive\Desktop\Advanced Epidemiology\Lab7_KomalBhosle_dataset1_log.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}10 Dec 2025, 19:50:05
+{txt}
+{com}. 
+. //To look at the dataset
+. sum
+
+{txt}    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 4}diabetes {c |}{res}      2,059    .0864497    .2810953          0          1
+{txt}{space 9}CHF {c |}{res}      2,059    .0485673    .2150138          0          1
+{txt}hypertension {c |}{res}      2,059    .3355998    .4723144          0          1
+{txt}{space 6}random {c |}{res}      2,059    .5960706    .2303279   .2002603   .9996176
+{txt}
+{com}. 
+. //Here we calculate the Odds Ratio for outcome and exposure variables to determine if hypertension is confounder or effect modifier
+. cc CHF diabetes
+                                                         {txt}Proportion
+{col 18}{c |}   Exposed   Unexposed  {c |}      Total      exposed
+{hline 17}{c +}{hline 24}{c +}{hline 24}
+           Cases {c |} {res}       22          78{txt}  {c |}  {res}      100       0.2200
+        {txt}Controls {c |} {res}      156        1803{txt}  {c |}  {res}     1959       0.0796
+{txt}{hline 17}{c +}{hline 24}{c +}{hline 24}
+{col 12}Total {c |} {res}      178        1881{txt}  {c |}  {res}     2059       0.0864
+{txt}{col 18}{c |}{col 43}{c |}
+{col 18}{c |}      Point estimate    {c |}    [95% conf. interval]
+{col 18}{c LT}{hline 24}{c +}{hline 24}
+      Odds ratio {c |} {res}{col 27} 3.259862{txt}{col 43}{c |}   {res} 1.878099    5.458518{txt} (exact)
+ Attr. frac. ex. {c |} {res}{col 27} .6932385{txt}{col 43}{c |}   {res} .4675466    .8168001{txt} (exact)
+ Attr. frac. pop {c |} {res}{col 27} .1525125{txt}{col 43}{c |}
+{col 18}{c BLC}{hline 24}{c BT}{hline 24}
+                               chi2(1) ={res}    23.74{txt}  Pr>chi2 ={res} 0.0000
+{txt}
+{com}. 
+. //Calculate the odds ratio for participants who have and do not have hypertension
+. cc CHF diabetes if hypertension == 0
+                                                         {txt}Proportion
+{col 18}{c |}   Exposed   Unexposed  {c |}      Total      exposed
+{hline 17}{c +}{hline 24}{c +}{hline 24}
+           Cases {c |} {res}        5          47{txt}  {c |}  {res}       52       0.0962
+        {txt}Controls {c |} {res}       58        1258{txt}  {c |}  {res}     1316       0.0441
+{txt}{hline 17}{c +}{hline 24}{c +}{hline 24}
+{col 12}Total {c |} {res}       63        1305{txt}  {c |}  {res}     1368       0.0461
+{txt}{col 18}{c |}{col 43}{c |}
+{col 18}{c |}      Point estimate    {c |}    [95% conf. interval]
+{col 18}{c LT}{hline 24}{c +}{hline 24}
+      Odds ratio {c |} {res}{col 27}  2.30741{txt}{col 43}{c |}   {res}  .689825    6.086396{txt} (exact)
+ Attr. frac. ex. {c |} {res}{col 27} .5666137{txt}{col 43}{c |}   {res}-.4496429    .8356992{txt} (exact)
+ Attr. frac. pop {c |} {res}{col 27} .0544821{txt}{col 43}{c |}
+{col 18}{c BLC}{hline 24}{c BT}{hline 24}
+                               chi2(1) ={res}     3.09{txt}  Pr>chi2 ={res} 0.0788
+{txt}
+{com}. cc CHF diabetes if hypertension == 1
+                                                         {txt}Proportion
+{col 18}{c |}   Exposed   Unexposed  {c |}      Total      exposed
+{hline 17}{c +}{hline 24}{c +}{hline 24}
+           Cases {c |} {res}       17          31{txt}  {c |}  {res}       48       0.3542
+        {txt}Controls {c |} {res}       98         545{txt}  {c |}  {res}      643       0.1524
+{txt}{hline 17}{c +}{hline 24}{c +}{hline 24}
+{col 12}Total {c |} {res}      115         576{txt}  {c |}  {res}      691       0.1664
+{txt}{col 18}{c |}{col 43}{c |}
+{col 18}{c |}      Point estimate    {c |}    [95% conf. interval]
+{col 18}{c LT}{hline 24}{c +}{hline 24}
+      Odds ratio {c |} {res}{col 27} 3.049704{txt}{col 43}{c |}   {res} 1.518231    5.927958{txt} (exact)
+ Attr. frac. ex. {c |} {res}{col 27} .6720993{txt}{col 43}{c |}   {res} .3413389    .8313078{txt} (exact)
+ Attr. frac. pop {c |} {res}{col 27} .2380352{txt}{col 43}{c |}
+{col 18}{c BLC}{hline 24}{c BT}{hline 24}
+                               chi2(1) ={res}    13.11{txt}  Pr>chi2 ={res} 0.0003
+{txt}
+{com}. 
+. //To calculate the odds ratio for each group and also the adjusted OR (Mantel-Haenszel)
+. cc CHF diabetes, by (hypertension)
+
+    {txt}hypertension {c |}{col 20}Odds ratio{col 35}[95% conf. interval]   M–H weight
+{hline 17}{c +}{hline 49}
+              no {c |}  {res}  2.30741       .689825   6.086396      1.99269{txt} (exact)
+             yes {c |}  {res} 3.049704      1.518231   5.927958     4.396527{txt} (exact)
+{hline 17}{c +}{hline 49}
+           Crude {c |}  {res} 3.259862      1.878099   5.458518{txt}{col 69}(exact)
+    M–H combined {c |}  {res} 2.818195      1.670241   4.755135{txt}{col 69}
+{hline 17}{c BT}{hline 49}
+Test of homogeneity (M–H)      chi2({res}1{txt}) = {res}    0.23{txt}  Pr>chi2 = {res}0.6334
+
+                 {txt}Test that combined odds ratio = 1:
+{col 33}Mantel{ch_endash}Haenszel chi2(1) ={res}     16.06
+{txt}{col 49}Pr>chi2 ={res}    0.0001
+{txt}
+{com}. 
+. //Now we do the logistic regression to test the significance between exposure outcome and the possible confounder or modifier.
+. logistic CHF diabetes##hypertension
+{res}
+{txt}{col 1}Logistic regression{col 57}{lalign 13:Number of obs}{col 70} = {res}{ralign 6:2,059}
+{txt}{col 57}{lalign 13:LR chi2({res:3})}{col 70} = {res}{ralign 6:22.55}
+{txt}{col 57}{lalign 13:Prob > chi2}{col 70} = {res}{ralign 6:0.0001}
+{txt}{col 1}{lalign 14:Log likelihood}{col 15} = {res}{ralign 10:-388.73891}{txt}{col 57}{lalign 13:Pseudo R2}{col 70} = {res}{ralign 6:0.0282}
+
+{txt}{hline 22}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}                  CHF{col 23}{c |} Odds ratio{col 35}   Std. err.{col 47}      z{col 55}   P>|z|{col 63}     [95% con{col 76}f. interval]
+{hline 22}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 13}diabetes {c |}
+{space 17}yes  {c |}{col 23}{res}{space 2}  2.30741{col 35}{space 2} 1.128776{col 46}{space 1}    1.71{col 55}{space 3}0.087{col 63}{space 4} .8845457{col 76}{space 3} 6.019069
+{txt}{space 21} {c |}
+{space 9}hypertension {c |}
+{space 17}yes  {c |}{col 23}{res}{space 2} 1.522467{col 35}{space 2} .3608101{col 46}{space 1}    1.77{col 55}{space 3}0.076{col 63}{space 4} .9568005{col 76}{space 3}  2.42256
+{txt}{space 21} {c |}
+diabetes#hypertension {c |}
+{space 13}yes#yes  {c |}{col 23}{res}{space 2}   1.3217{col 35}{space 2} .7734299{col 46}{space 1}    0.48{col 55}{space 3}0.634{col 63}{space 4} .4197864{col 76}{space 3}  4.16138
+{txt}{space 21} {c |}
+{space 16}_cons {c |}{col 23}{res}{space 2} .0373609{col 35}{space 2} .0055505{col 46}{space 1}  -22.13{col 55}{space 3}0.000{col 63}{space 4} .0279228{col 76}{space 3} .0499892
+{txt}{hline 22}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 6 2}Note: {bf:_cons} estimates baseline odds{txt}.{p_end}
+
+{com}. 
+. //Closing the log file
+. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\komal\OneDrive\Desktop\Advanced Epidemiology\Lab7_KomalBhosle_dataset1_log.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}10 Dec 2025, 19:50:08
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}

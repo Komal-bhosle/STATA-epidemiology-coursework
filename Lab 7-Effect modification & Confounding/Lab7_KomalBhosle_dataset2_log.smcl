@@ -1,0 +1,126 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\komal\OneDrive\Desktop\Advanced Epidemiology\Lab7_KomalBhosle_dataset2_log.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}10 Dec 2025, 19:50:51
+{txt}
+{com}. 
+. //To look at the dataset
+. sum
+
+{txt}    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 5}newdrug {c |}{res}      1,294    .4992272    .5001927          0          1
+{txt}{space 3}older_age {c |}{res}      1,294     .503864    .5001784          0          1
+{txt}{space 2}depression {c |}{res}      1,294    .4930448    .5001449          0          1
+{txt}{space 6}random {c |}{res}      1,294    .5984072    .2312178   .2002603   .9996176
+{txt}
+{com}. 
+. //Here we calculate the Odds Ratio of exposure to outcome variables
+. cc depression newdrug
+                                                         {txt}Proportion
+{col 18}{c |}   Exposed   Unexposed  {c |}      Total      exposed
+{hline 17}{c +}{hline 24}{c +}{hline 24}
+           Cases {c |} {res}      298         340{txt}  {c |}  {res}      638       0.4671
+        {txt}Controls {c |} {res}      348         308{txt}  {c |}  {res}      656       0.5305
+{txt}{hline 17}{c +}{hline 24}{c +}{hline 24}
+{col 12}Total {c |} {res}      646         648{txt}  {c |}  {res}     1294       0.4992
+{txt}{col 18}{c |}{col 43}{c |}
+{col 18}{c |}      Point estimate    {c |}    [95% conf. interval]
+{col 18}{c LT}{hline 24}{c +}{hline 24}
+      Odds ratio {c |} {res}{col 27} .7757268{txt}{col 43}{c |}   {res} .6197599    .9709216{txt} (exact)
+ Prev. frac. ex. {c |} {res}{col 27} .2242732{txt}{col 43}{c |}   {res} .0290784    .3802401{txt} (exact)
+ Prev. frac. pop {c |} {res}{col 27} .1189742{txt}{col 43}{c |}
+{col 18}{c BLC}{hline 24}{c BT}{hline 24}
+                               chi2(1) ={res}     5.20{txt}  Pr>chi2 ={res} 0.0226
+{txt}
+{com}. 
+. //Calculate the odds ratio for younger and older participants
+. cc depression newdrug if older_age == 0
+                                                         {txt}Proportion
+{col 18}{c |}   Exposed   Unexposed  {c |}      Total      exposed
+{hline 17}{c +}{hline 24}{c +}{hline 24}
+           Cases {c |} {res}      159         162{txt}  {c |}  {res}      321       0.4953
+        {txt}Controls {c |} {res}      157         164{txt}  {c |}  {res}      321       0.4891
+{txt}{hline 17}{c +}{hline 24}{c +}{hline 24}
+{col 12}Total {c |} {res}      316         326{txt}  {c |}  {res}      642       0.4922
+{txt}{col 18}{c |}{col 43}{c |}
+{col 18}{c |}      Point estimate    {c |}    [95% conf. interval]
+{col 18}{c LT}{hline 24}{c +}{hline 24}
+      Odds ratio {c |} {res}{col 27} 1.025242{txt}{col 43}{c |}   {res} .7433774    1.413994{txt} (exact)
+ Attr. frac. ex. {c |} {res}{col 27} .0246203{txt}{col 43}{c |}   {res}-.3452118    .2927833{txt} (exact)
+ Attr. frac. pop {c |} {res}{col 27} .0121951{txt}{col 43}{c |}
+{col 18}{c BLC}{hline 24}{c BT}{hline 24}
+                               chi2(1) ={res}     0.02{txt}  Pr>chi2 ={res} 0.8745
+{txt}
+{com}. cc depression newdrug if older_age == 1
+                                                         {txt}Proportion
+{col 18}{c |}   Exposed   Unexposed  {c |}      Total      exposed
+{hline 17}{c +}{hline 24}{c +}{hline 24}
+           Cases {c |} {res}      139         178{txt}  {c |}  {res}      317       0.4385
+        {txt}Controls {c |} {res}      191         144{txt}  {c |}  {res}      335       0.5701
+{txt}{hline 17}{c +}{hline 24}{c +}{hline 24}
+{col 12}Total {c |} {res}      330         322{txt}  {c |}  {res}      652       0.5061
+{txt}{col 18}{c |}{col 43}{c |}
+{col 18}{c |}      Point estimate    {c |}    [95% conf. interval]
+{col 18}{c LT}{hline 24}{c +}{hline 24}
+      Odds ratio {c |} {res}{col 27} .5887405{txt}{col 43}{c |}   {res} .4266661    .8122475{txt} (exact)
+ Prev. frac. ex. {c |} {res}{col 27} .4112595{txt}{col 43}{c |}   {res} .1877525    .5733339{txt} (exact)
+ Prev. frac. pop {c |} {res}{col 27} .2344793{txt}{col 43}{c |}
+{col 18}{c BLC}{hline 24}{c BT}{hline 24}
+                               chi2(1) ={res}    11.30{txt}  Pr>chi2 ={res} 0.0008
+{txt}
+{com}. 
+. //To calculate the odds ratio for each group and also the adjusted OR (Mantel-Haenszel)
+. cc depression newdrug, by (older_age)
+
+    {txt}Age; older=1 {c |}{col 20}Odds ratio{col 35}[95% conf. interval]   M–H weight
+{hline 17}{c +}{hline 49}
+         younger {c |}  {res} 1.025242      .7433774   1.413994     39.61682{txt} (exact)
+           older {c |}  {res} .5887405      .4266661   .8122475     52.14417{txt} (exact)
+{hline 17}{c +}{hline 49}
+           Crude {c |}  {res} .7757268      .6197599   .9709216{txt}{col 69}(exact)
+    M–H combined {c |}  {res} .7771953      .6250142     .96643{txt}{col 69}
+{hline 17}{c BT}{hline 49}
+Test of homogeneity (M–H)      chi2({res}1{txt}) = {res}    6.16{txt}  Pr>chi2 = {res}0.0130
+
+                 {txt}Test that combined odds ratio = 1:
+{col 33}Mantel{ch_endash}Haenszel chi2(1) ={res}      5.16
+{txt}{col 49}Pr>chi2 ={res}    0.0231
+{txt}
+{com}. 
+. //Now we do the logistic regression to test the significance between exposure outcome and the possible confounder or modifier.
+. logistic depression newdrug##older_age
+{res}
+{txt}{col 1}Logistic regression{col 57}{lalign 13:Number of obs}{col 70} = {res}{ralign 6:1,294}
+{txt}{col 57}{lalign 13:LR chi2({res:3})}{col 70} = {res}{ralign 6:11.60}
+{txt}{col 57}{lalign 13:Prob > chi2}{col 70} = {res}{ralign 6:0.0089}
+{txt}{col 1}{lalign 14:Log likelihood}{col 15} = {res}{ralign 10:-891.00751}{txt}{col 57}{lalign 13:Pseudo R2}{col 70} = {res}{ralign 6:0.0065}
+
+{txt}{hline 18}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}       depression{col 19}{c |} Odds ratio{col 31}   Std. err.{col 43}      z{col 51}   P>|z|{col 59}     [95% con{col 72}f. interval]
+{hline 18}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 10}newdrug {c |}
+{space 13}yes  {c |}{col 19}{res}{space 2} 1.025242{col 31}{space 2}  .161875{col 42}{space 1}    0.16{col 51}{space 3}0.875{col 59}{space 4} .7523682{col 72}{space 3} 1.397083
+{txt}{space 17} {c |}
+{space 8}older_age {c |}
+{space 11}older  {c |}{col 19}{res}{space 2} 1.251372{col 31}{space 2} .1971966{col 42}{space 1}    1.42{col 51}{space 3}0.155{col 59}{space 4} .9188621{col 72}{space 3} 1.704207
+{txt}{space 17} {c |}
+newdrug#older_age {c |}
+{space 7}yes#older  {c |}{col 19}{res}{space 2} .5742455{col 31}{space 2} .1283042{col 42}{space 1}   -2.48{col 51}{space 3}0.013{col 59}{space 4} .3706063{col 72}{space 3} .8897795
+{txt}{space 17} {c |}
+{space 12}_cons {c |}{col 19}{res}{space 2} .9878049{col 31}{space 2}  .109421{col 42}{space 1}   -0.11{col 51}{space 3}0.912{col 59}{space 4} .7950272{col 72}{space 3} 1.227327
+{txt}{hline 18}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 6 2}Note: {bf:_cons} estimates baseline odds{txt}.{p_end}
+
+{com}. 
+. //Closing the log file
+. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\komal\OneDrive\Desktop\Advanced Epidemiology\Lab7_KomalBhosle_dataset2_log.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}10 Dec 2025, 19:50:52
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}
