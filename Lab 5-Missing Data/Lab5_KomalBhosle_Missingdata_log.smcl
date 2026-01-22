@@ -1,0 +1,441 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\komal\OneDrive\Desktop\Advanced Epidemiology\Lab5_KomalBhosle_Missingdata_log.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res} 9 Nov 2025, 14:22:08
+{txt}
+{com}. 
+. //To look at the dataset and explore the variables with 
+. //number of observations, mean, and min. and max. values
+. sum
+
+{txt}    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 10}id {c |}{res}        797    502.3915    289.3205          1       1000
+{txt}intervention {c |}{res}        620    .5080645    .5003386          0          1
+{txt}{space 3}age_group {c |}{res}        797    .4905897    .5002254          0          1
+{txt}{space 1}improvement {c |}{res}        797    .5056462    .5002821          0          1
+{txt}days_enrol~d {c |}{res}        620    19.60968    2.792079          8         34
+{txt}{hline 13}{c +}{hline 57}
+{space 3}weight_lb {c |}{res}        797    159.3739    15.01919         99        229
+{txt}{space 6}random {c |}{res}        797    .5966331    .2329026   .2002603   .9996176
+{txt}
+{com}. 
+. //To list the variables with their labels and value labels
+. //codebook
+. 
+. //This will open a window to show you the raw dataset
+. //browse
+. 
+. //To determine how much data are missing
+. //Provides a table showing how much is missing from each variable
+. //This creates a new variable for each existing variable and names them as miss_existingname
+. misstable summarize, gen(miss_)
+{txt}{col 64}Obs<.
+{col 49}{c TLC}{hline 30}
+{col 16}{c |}{col 49}{c |} Unique
+{col 7}Variable {c |}{col 22}Obs=.{col 32}Obs>.{col 42}Obs<.{col 49}{c |} values{col 65}Min{col 77}Max
+  {hline 13}{c +}{hline 32}{c +}{hline 30}
+  intervention {c |}{res}       177{txt}{space 10}{res}       620{txt}  {c |}      2          0           1
+  days_enrol~d {c |}{res}       177{txt}{space 10}{res}       620{txt}  {c |}     21          8          34
+  {hline 13}{c BT}{hline 32}{c BT}{hline 30}
+
+{com}. 
+. //The easy way to see what is missing is to summarize the miss_ variables 
+. //with this code where * tells stata to include all variables starting with "miss_"
+. sum miss_*
+
+{txt}    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+miss_inter~n {c |}{res}        797    .2220828    .4159075          0          1
+{txt}miss_days_~d {c |}{res}        797    .2220828    .4159075          0          1
+{txt}
+{com}. 
+. //Calculating the Odds ratio for the association between the intervention and detecting improvement
+. logistic improvement intervention
+{res}
+{txt}{col 1}Logistic regression{col 57}{lalign 13:Number of obs}{col 70} = {res}{ralign 6:620}
+{txt}{col 57}{lalign 13:LR chi2({res:1})}{col 70} = {res}{ralign 6:2.33}
+{txt}{col 57}{lalign 13:Prob > chi2}{col 70} = {res}{ralign 6:0.1268}
+{txt}{col 1}{lalign 14:Log likelihood}{col 15} = {res}{ralign 9:-428.5857}{txt}{col 57}{lalign 13:Pseudo R2}{col 70} = {res}{ralign 6:0.0027}
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1} improvement{col 14}{c |} Odds ratio{col 26}   Std. err.{col 38}      z{col 46}   P>|z|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+intervention {c |}{col 14}{res}{space 2} 1.278303{col 26}{space 2} .2057656{col 37}{space 1}    1.53{col 46}{space 3}0.127{col 54}{space 4} .9324332{col 67}{space 3} 1.752467
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .8827161{col 26}{space 2} .1012851{col 37}{space 1}   -1.09{col 46}{space 3}0.277{col 54}{space 4} .7049398{col 67}{space 3} 1.105325
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 6 2}Note: {bf:_cons} estimates baseline odds{txt}.{p_end}
+
+{com}. 
+. //Calculating the Odds ratio for the association between the intervention and detecting improvement for each age group
+. logistic improvement intervention if age_group==0
+{res}
+{txt}{col 1}Logistic regression{col 57}{lalign 13:Number of obs}{col 70} = {res}{ralign 6:342}
+{txt}{col 57}{lalign 13:LR chi2({res:1})}{col 70} = {res}{ralign 6:0.86}
+{txt}{col 57}{lalign 13:Prob > chi2}{col 70} = {res}{ralign 6:0.3551}
+{txt}{col 1}{lalign 14:Log likelihood}{col 15} = {res}{ralign 10:-236.15483}{txt}{col 57}{lalign 13:Pseudo R2}{col 70} = {res}{ralign 6:0.0018}
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1} improvement{col 14}{c |} Odds ratio{col 26}   Std. err.{col 38}      z{col 46}   P>|z|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+intervention {c |}{col 14}{res}{space 2} 1.222222{col 26}{space 2} .2653603{col 37}{space 1}    0.92{col 46}{space 3}0.355{col 54}{space 4} .7986257{col 67}{space 3} 1.870497
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}        1{col 26}{space 2} .1571348{col 37}{space 1}    0.00{col 46}{space 3}1.000{col 54}{space 4}  .734931{col 67}{space 3} 1.360672
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 6 2}Note: {bf:_cons} estimates baseline odds{txt}.{p_end}
+
+{com}. logistic improvement intervention if age_group==1
+{res}
+{txt}{col 1}Logistic regression{col 57}{lalign 13:Number of obs}{col 70} = {res}{ralign 6:278}
+{txt}{col 57}{lalign 13:LR chi2({res:1})}{col 70} = {res}{ralign 6:1.37}
+{txt}{col 57}{lalign 13:Prob > chi2}{col 70} = {res}{ralign 6:0.2413}
+{txt}{col 1}{lalign 14:Log likelihood}{col 15} = {res}{ralign 10:-191.42523}{txt}{col 57}{lalign 13:Pseudo R2}{col 70} = {res}{ralign 6:0.0036}
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1} improvement{col 14}{c |} Odds ratio{col 26}   Std. err.{col 38}      z{col 46}   P>|z|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+intervention {c |}{col 14}{res}{space 2} 1.325951{col 26}{space 2} .3196228{col 37}{space 1}    1.17{col 46}{space 3}0.242{col 54}{space 4} .8266921{col 67}{space 3} 2.126724
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .7654321{col 26}{space 2} .1291625{col 37}{space 1}   -1.58{col 46}{space 3}0.113{col 54}{space 4}  .549884{col 67}{space 3} 1.065473
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 6 2}Note: {bf:_cons} estimates baseline odds{txt}.{p_end}
+
+{com}. 
+. //To do multiple imputation using mlong will create observations with missing values added for each imputation
+. mi set mlong
+{txt}
+{com}. 
+. //other way is flong which repeats every observation for every imputation which creates larger files.
+. 
+. //To take a look at how the data are missing we run the code below 
+. //Obs=. tells you how many observations are missing values for the variable
+. //Obs<. tells you how many are not missing
+. mi misstable summarize
+{txt}{col 64}Obs<.
+{col 49}{c TLC}{hline 30}
+{col 16}{c |}{col 49}{c |} Unique
+{col 7}Variable {c |}{col 22}Obs=.{col 32}Obs>.{col 42}Obs<.{col 49}{c |} values{col 65}Min{col 77}Max
+  {hline 13}{c +}{hline 32}{c +}{hline 30}
+  intervention {c |}{res}       177{txt}{space 10}{res}       620{txt}  {c |}      2          0           1
+  days_enrol~d {c |}{res}       177{txt}{space 10}{res}       620{txt}  {c |}     21          8          34
+  {hline 13}{c BT}{hline 32}{c BT}{hline 30}
+
+{com}. 
+. //To tell stata which variable to be used in imputation model
+. mi register imputed intervention days_enrolled weight_lb
+{res}{txt}{p}
+(177 {it:m}=0 obs now marked as incomplete)
+{p_end}
+
+{com}. 
+. //This tells stata not to impute these variables, in this case there are no missing values.
+. mi register regular improvement age_group
+{txt}
+{com}. 
+. //Imputing by adding 5 new sets of data
+. mi impute chained (regress) days_enrolled (logit) intervention = age_group improvement,add(5)
+{res}{txt}note: missing-value pattern is monotone; no iteration performed.
+
+Conditional models (monotone):
+{p 5 21 2}
+{bf:days_enrolled}: regress days_enrolled age_group improvement
+{p_end}
+{p 6 21 2}
+{bf:intervention}: logit intervention days_enrolled age_group improvement
+{p_end}
+
+{res}{txt}Performing chained iterations ...
+{res}{txt}
+Multivariate imputation{txt}{col 45}{ralign 12:Imputations }= {res}       5
+{txt}Chained equations{txt}{col 45}{ralign 12:added }= {res}       5
+{txt}Imputed: {it:m}=1 through {it:m}=5{txt}{col 45}{ralign 12:updated }= {res}       0
+
+{txt}Initialization: {res}monotone{txt}{col 45}{ralign 12:Iterations }= {res}       0
+{txt}{col 45}{ralign 12:burn-in }= {res}       0
+
+{txt}{p 5 15 2}{bf:days_enrolled}: linear regression{p_end}
+{txt}{p 6 15 2}{bf:intervention}: logistic regression{p_end}
+
+{txt}{hline 19}{c TT}{hline 35}{hline 11}
+{txt}{col 20}{c |}{center 46:  Observations per {it:m}}
+{txt}{col 20}{c LT}{hline 35}{c TT}{hline 10}
+{txt}{col 11}Variable {c |}{ralign 12:Complete }{ralign 13:Incomplete }{ralign 10:Imputed }{c |}{ralign 10:Total}
+{hline 19}{c +}{hline 35}{c +}{hline 10}
+{txt}{ralign 19:days_enrolled }{c |}{res}        620          177       177 {txt}{c |}{res}       797
+{txt}{ralign 19:intervention }{c |}{res}        620          177       177 {txt}{c |}{res}       797
+{txt}{hline 19}{c BT}{hline 35}{c BT}{hline 10}
+{p 0 1 1 66}(Complete + Incomplete = Total; Imputed is the minimum across {it:m}
+ of the number of filled-in observations.){p_end}
+
+{com}. 
+. //"(regress) days_enrolled"– days_enrolled is a continuous variable so we will use linear regression ("regress") to fill in the missing values.
+. //"(logit) intervention" – intervention is dichotomous so we will use logistic regression ("logit") to fill in the missing values.
+. //The variables after the equal sign (=) will not be imputed, but they contribute to the models imputing the other variables
+. 
+. //Now we estimate the odds ratio with this new information
+. mi estimate, or: logistic improvement intervention
+{res}
+{txt}Multiple-imputation estimates{col 49}Imputations{col 67}= {res}         5
+{txt}Logistic regression{col 49}Number of obs{col 67}= {res}       797
+{txt}{col 49}Average RVI{col 67}= {res}    0.1372
+{txt}{col 49}Largest FMI{col 67}= {res}    0.2323
+{txt}DF adjustment:{ralign 15: {res:Large sample}}{col 49}DF:     min{col 67}= {res}     86.71
+{txt}{col 49}        avg{col 67}= {res}    174.69
+{txt}{col 49}        max{col 67}= {res}    262.66
+{txt}Model F test:{ralign 16: {res:Equal FMI}}{col 49}F({res}   1{txt},{res}   86.7{txt}){col 67}= {res}      2.71
+{txt}Within VCE type: {ralign 12:{res:OIM}}{col 49}Prob > F{col 67}= {res}    0.1035
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1} improvement{col 14}{c |} Odds ratio{col 26}   Std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+intervention {c |}{col 14}{res}{space 2} 1.301832{col 26}{space 2} .2086875{col 37}{space 1}    1.65{col 46}{space 3}0.103{col 54}{space 4} .9466159{col 67}{space 3} 1.790342
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .8944407{col 26}{space 2} .0967447{col 37}{space 1}   -1.03{col 46}{space 3}0.303{col 54}{space 4} .7228655{col 67}{space 3}  1.10674
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 6 2}Note: {bf:_cons} estimates baseline odds{txt}.{p_end}
+{res}{txt}
+{com}. mi estimate, or: logistic improvement intervention if age_group==0
+{res}
+{txt}Multiple-imputation estimates{col 49}Imputations{col 67}= {res}         5
+{txt}Logistic regression{col 49}Number of obs{col 67}= {res}       406
+{txt}{col 49}Average RVI{col 67}= {res}    0.1879
+{txt}{col 49}Largest FMI{col 67}= {res}    0.2984
+{txt}DF adjustment:{ralign 15: {res:Large sample}}{col 49}DF:     min{col 67}= {res}     53.76
+{txt}{col 49}        avg{col 67}= {res}    100.67
+{txt}{col 49}        max{col 67}= {res}    147.58
+{txt}Model F test:{ralign 16: {res:Equal FMI}}{col 49}F({res}   1{txt},{res}   53.8{txt}){col 67}= {res}      1.28
+{txt}Within VCE type: {ralign 12:{res:OIM}}{col 49}Prob > F{col 67}= {res}    0.2623
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1} improvement{col 14}{c |} Odds ratio{col 26}   Std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+intervention {c |}{col 14}{res}{space 2} 1.303257{col 26}{space 2} .3047159{col 37}{space 1}    1.13{col 46}{space 3}0.262{col 54}{space 4} .8155066{col 67}{space 3} 2.082727
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .9046133{col 26}{space 2} .1434019{col 37}{space 1}   -0.63{col 46}{space 3}0.528{col 54}{space 4} .6613211{col 67}{space 3}  1.23741
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 6 2}Note: {bf:_cons} estimates baseline odds{txt}.{p_end}
+{res}{txt}
+{com}. mi estimate, or: logistic improvement intervention if age_group==1
+{res}
+{txt}Multiple-imputation estimates{col 49}Imputations{col 67}= {res}         5
+{txt}Logistic regression{col 49}Number of obs{col 67}= {res}       391
+{txt}{col 49}Average RVI{col 67}= {res}    0.0883
+{txt}{col 49}Largest FMI{col 67}= {res}    0.1588
+{txt}DF adjustment:{ralign 15: {res:Large sample}}{col 49}DF:     min{col 67}= {res}    179.00
+{txt}{col 49}        avg{col 67}= {res}    439.01
+{txt}{col 49}        max{col 67}= {res}    699.03
+{txt}Model F test:{ralign 16: {res:Equal FMI}}{col 49}F({res}   1{txt},{res}  179.0{txt}){col 67}= {res}      1.41
+{txt}Within VCE type: {ralign 12:{res:OIM}}{col 49}Prob > F{col 67}= {res}    0.2373
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1} improvement{col 14}{c |} Odds ratio{col 26}   Std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+intervention {c |}{col 14}{res}{space 2} 1.297977{col 26}{space 2} .2854925{col 37}{space 1}    1.19{col 46}{space 3}0.237{col 54}{space 4} .8409481{col 67}{space 3} 2.003387
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .8853534{col 26}{space 2} .1304446{col 37}{space 1}   -0.83{col 46}{space 3}0.409{col 54}{space 4} .6629585{col 67}{space 3} 1.182352
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 6 2}Note: {bf:_cons} estimates baseline odds{txt}.{p_end}
+{res}{txt}
+{com}.   
+. //Now we see if the estimates change if we add 5 more imputations
+. mi impute chained (regress) days_enrolled (logit) intervention = age_group improvement,add(5)
+{res}{txt}note: missing-value pattern is monotone; no iteration performed.
+
+Conditional models (monotone):
+{p 5 21 2}
+{bf:days_enrolled}: regress days_enrolled age_group improvement
+{p_end}
+{p 6 21 2}
+{bf:intervention}: logit intervention days_enrolled age_group improvement
+{p_end}
+
+{res}{txt}Performing chained iterations ...
+{res}{txt}
+Multivariate imputation{txt}{col 45}{ralign 12:Imputations }= {res}      10
+{txt}Chained equations{txt}{col 45}{ralign 12:added }= {res}       5
+{txt}Imputed: {it:m}=6 through {it:m}=10{txt}{col 45}{ralign 12:updated }= {res}       0
+
+{txt}Initialization: {res}monotone{txt}{col 45}{ralign 12:Iterations }= {res}       0
+{txt}{col 45}{ralign 12:burn-in }= {res}       0
+
+{txt}{p 5 15 2}{bf:days_enrolled}: linear regression{p_end}
+{txt}{p 6 15 2}{bf:intervention}: logistic regression{p_end}
+
+{txt}{hline 19}{c TT}{hline 35}{hline 11}
+{txt}{col 20}{c |}{center 46:  Observations per {it:m}}
+{txt}{col 20}{c LT}{hline 35}{c TT}{hline 10}
+{txt}{col 11}Variable {c |}{ralign 12:Complete }{ralign 13:Incomplete }{ralign 10:Imputed }{c |}{ralign 10:Total}
+{hline 19}{c +}{hline 35}{c +}{hline 10}
+{txt}{ralign 19:days_enrolled }{c |}{res}        620          177       177 {txt}{c |}{res}       797
+{txt}{ralign 19:intervention }{c |}{res}        620          177       177 {txt}{c |}{res}       797
+{txt}{hline 19}{c BT}{hline 35}{c BT}{hline 10}
+{p 0 1 1 66}(Complete + Incomplete = Total; Imputed is the minimum across {it:m}
+ of the number of filled-in observations.){p_end}
+
+{com}. 
+. //Now we estimate the odds ratio with this new information
+. mi estimate, or: logistic improvement intervention
+{res}
+{txt}Multiple-imputation estimates{col 49}Imputations{col 67}= {res}        10
+{txt}Logistic regression{col 49}Number of obs{col 67}= {res}       797
+{txt}{col 49}Average RVI{col 67}= {res}    0.1736
+{txt}{col 49}Largest FMI{col 67}= {res}    0.2678
+{txt}DF adjustment:{ralign 15: {res:Large sample}}{col 49}DF:     min{col 67}= {res}    136.16
+{txt}{col 49}        avg{col 67}= {res}    256.41
+{txt}{col 49}        max{col 67}= {res}    376.67
+{txt}Model F test:{ralign 16: {res:Equal FMI}}{col 49}F({res}   1{txt},{res}  136.2{txt}){col 67}= {res}      2.30
+{txt}Within VCE type: {ralign 12:{res:OIM}}{col 49}Prob > F{col 67}= {res}    0.1315
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1} improvement{col 14}{c |} Odds ratio{col 26}   Std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+intervention {c |}{col 14}{res}{space 2} 1.284025{col 26}{space 2} .2115793{col 37}{space 1}    1.52{col 46}{space 3}0.132{col 54}{space 4} .9269502{col 67}{space 3} 1.778651
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}  .901278{col 26}{space 2} .0989076{col 37}{space 1}   -0.95{col 46}{space 3}0.344{col 54}{space 4} .7263494{col 67}{space 3} 1.118335
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 6 2}Note: {bf:_cons} estimates baseline odds{txt}.{p_end}
+{res}{txt}
+{com}. mi estimate, or: logistic improvement intervention if age_group==0
+{res}
+{txt}Multiple-imputation estimates{col 49}Imputations{col 67}= {res}        10
+{txt}Logistic regression{col 49}Number of obs{col 67}= {res}       406
+{txt}{col 49}Average RVI{col 67}= {res}    0.1706
+{txt}{col 49}Largest FMI{col 67}= {res}    0.2639
+{txt}DF adjustment:{ralign 15: {res:Large sample}}{col 49}DF:     min{col 67}= {res}    140.09
+{txt}{col 49}        avg{col 67}= {res}    275.11
+{txt}{col 49}        max{col 67}= {res}    410.13
+{txt}Model F test:{ralign 16: {res:Equal FMI}}{col 49}F({res}   1{txt},{res}  140.1{txt}){col 67}= {res}      1.05
+{txt}Within VCE type: {ralign 12:{res:OIM}}{col 49}Prob > F{col 67}= {res}    0.3076
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1} improvement{col 14}{c |} Odds ratio{col 26}   Std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+intervention {c |}{col 14}{res}{space 2} 1.266294{col 26}{space 2}  .291947{col 37}{space 1}    1.02{col 46}{space 3}0.308{col 54}{space 4} .8027452{col 67}{space 3}  1.99752
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .9200789{col 26}{space 2} .1432582{col 37}{space 1}   -0.53{col 46}{space 3}0.593{col 54}{space 4} .6774839{col 67}{space 3} 1.249543
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 6 2}Note: {bf:_cons} estimates baseline odds{txt}.{p_end}
+{res}{txt}
+{com}. mi estimate, or: logistic improvement intervention if age_group==1
+{res}
+{txt}Multiple-imputation estimates{col 49}Imputations{col 67}= {res}        10
+{txt}Logistic regression{col 49}Number of obs{col 67}= {res}       391
+{txt}{col 49}Average RVI{col 67}= {res}    0.0877
+{txt}{col 49}Largest FMI{col 67}= {res}    0.1514
+{txt}DF adjustment:{ralign 15: {res:Large sample}}{col 49}DF:     min{col 67}= {res}    414.85
+{txt}{col 49}        avg{col 67}= {res}    789.91
+{txt}{col 49}        max{col 67}= {res}  1,164.97
+{txt}Model F test:{ralign 16: {res:Equal FMI}}{col 49}F({res}   1{txt},{res}  414.8{txt}){col 67}= {res}      1.43
+{txt}Within VCE type: {ralign 12:{res:OIM}}{col 49}Prob > F{col 67}= {res}    0.2321
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1} improvement{col 14}{c |} Odds ratio{col 26}   Std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+intervention {c |}{col 14}{res}{space 2} 1.300798{col 26}{space 2} .2858404{col 37}{space 1}    1.20{col 46}{space 3}0.232{col 54}{space 4}  .844535{col 67}{space 3} 2.003559
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .8835169{col 26}{space 2} .1312031{col 37}{space 1}   -0.83{col 46}{space 3}0.404{col 54}{space 4} .6602055{col 67}{space 3} 1.182362
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 6 2}Note: {bf:_cons} estimates baseline odds{txt}.{p_end}
+{res}{txt}
+{com}.   
+. //Now we see if the estimates change if we add 10 more imputations
+. mi impute chained (regress) days_enrolled (logit) intervention = age_group improvement,add(10)
+{res}{txt}note: missing-value pattern is monotone; no iteration performed.
+
+Conditional models (monotone):
+{p 5 21 2}
+{bf:days_enrolled}: regress days_enrolled age_group improvement
+{p_end}
+{p 6 21 2}
+{bf:intervention}: logit intervention days_enrolled age_group improvement
+{p_end}
+
+{res}{txt}Performing chained iterations ...
+{res}{txt}
+Multivariate imputation{txt}{col 45}{ralign 12:Imputations }= {res}      20
+{txt}Chained equations{txt}{col 45}{ralign 12:added }= {res}      10
+{txt}Imputed: {it:m}=11 through {it:m}=20{txt}{col 45}{ralign 12:updated }= {res}       0
+
+{txt}Initialization: {res}monotone{txt}{col 45}{ralign 12:Iterations }= {res}       0
+{txt}{col 45}{ralign 12:burn-in }= {res}       0
+
+{txt}{p 5 15 2}{bf:days_enrolled}: linear regression{p_end}
+{txt}{p 6 15 2}{bf:intervention}: logistic regression{p_end}
+
+{txt}{hline 19}{c TT}{hline 35}{hline 11}
+{txt}{col 20}{c |}{center 46:  Observations per {it:m}}
+{txt}{col 20}{c LT}{hline 35}{c TT}{hline 10}
+{txt}{col 11}Variable {c |}{ralign 12:Complete }{ralign 13:Incomplete }{ralign 10:Imputed }{c |}{ralign 10:Total}
+{hline 19}{c +}{hline 35}{c +}{hline 10}
+{txt}{ralign 19:days_enrolled }{c |}{res}        620          177       177 {txt}{c |}{res}       797
+{txt}{ralign 19:intervention }{c |}{res}        620          177       177 {txt}{c |}{res}       797
+{txt}{hline 19}{c BT}{hline 35}{c BT}{hline 10}
+{p 0 1 1 66}(Complete + Incomplete = Total; Imputed is the minimum across {it:m}
+ of the number of filled-in observations.){p_end}
+
+{com}. 
+. //Now we estimate the odds ratio with this new information
+. mi estimate, or: logistic improvement intervention
+{res}
+{txt}Multiple-imputation estimates{col 49}Imputations{col 67}= {res}        20
+{txt}Logistic regression{col 49}Number of obs{col 67}= {res}       797
+{txt}{col 49}Average RVI{col 67}= {res}    0.1144
+{txt}{col 49}Largest FMI{col 67}= {res}    0.1881
+{txt}DF adjustment:{ralign 15: {res:Large sample}}{col 49}DF:     min{col 67}= {res}    553.86
+{txt}{col 49}        avg{col 67}= {res}  1,082.60
+{txt}{col 49}        max{col 67}= {res}  1,611.34
+{txt}Model F test:{ralign 16: {res:Equal FMI}}{col 49}F({res}   1{txt},{res}  553.9{txt}){col 67}= {res}      2.42
+{txt}Within VCE type: {ralign 12:{res:OIM}}{col 49}Prob > F{col 67}= {res}    0.1201
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1} improvement{col 14}{c |} Odds ratio{col 26}   Std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+intervention {c |}{col 14}{res}{space 2} 1.277514{col 26}{space 2} .2009945{col 37}{space 1}    1.56{col 46}{space 3}0.120{col 54}{space 4} .9378874{col 67}{space 3} 1.740126
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .9034756{col 26}{space 2} .0966133{col 37}{space 1}   -0.95{col 46}{space 3}0.343{col 54}{space 4} .7325287{col 67}{space 3} 1.114316
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 6 2}Note: {bf:_cons} estimates baseline odds{txt}.{p_end}
+{res}{txt}
+{com}. mi estimate, or: logistic improvement intervention if age_group==0
+{res}
+{txt}Multiple-imputation estimates{col 49}Imputations{col 67}= {res}        20
+{txt}Logistic regression{col 49}Number of obs{col 67}= {res}       406
+{txt}{col 49}Average RVI{col 67}= {res}    0.1260
+{txt}{col 49}Largest FMI{col 67}= {res}    0.2040
+{txt}DF adjustment:{ralign 15: {res:Large sample}}{col 49}DF:     min{col 67}= {res}    471.91
+{txt}{col 49}        avg{col 67}= {res}    930.95
+{txt}{col 49}        max{col 67}= {res}  1,390.00
+{txt}Model F test:{ralign 16: {res:Equal FMI}}{col 49}F({res}   1{txt},{res}  471.9{txt}){col 67}= {res}      1.00
+{txt}Within VCE type: {ralign 12:{res:OIM}}{col 49}Prob > F{col 67}= {res}    0.3168
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1} improvement{col 14}{c |} Odds ratio{col 26}   Std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+intervention {c |}{col 14}{res}{space 2}  1.25007{col 26}{space 2} .2784441{col 37}{space 1}    1.00{col 46}{space 3}0.317{col 54}{space 4} .8069523{col 67}{space 3} 1.936515
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .9259422{col 26}{space 2}  .141586{col 37}{space 1}   -0.50{col 46}{space 3}0.615{col 54}{space 4} .6859825{col 67}{space 3} 1.249841
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 6 2}Note: {bf:_cons} estimates baseline odds{txt}.{p_end}
+{res}{txt}
+{com}. mi estimate, or: logistic improvement intervention if age_group==1
+{res}
+{txt}Multiple-imputation estimates{col 49}Imputations{col 67}= {res}        20
+{txt}Logistic regression{col 49}Number of obs{col 67}= {res}       391
+{txt}{col 49}Average RVI{col 67}= {res}    0.0567
+{txt}{col 49}Largest FMI{col 67}= {res}    0.1005
+{txt}DF adjustment:{ralign 15: {res:Large sample}}{col 49}DF:     min{col 67}= {res}  1,915.45
+{txt}{col 49}        avg{col 67}= {res}  3,878.73
+{txt}{col 49}        max{col 67}= {res}  5,842.01
+{txt}Model F test:{ralign 16: {res:Equal FMI}}{col 49}F({res}   1{txt},{res} 1915.4{txt}){col 67}= {res}      1.55
+{txt}Within VCE type: {ralign 12:{res:OIM}}{col 49}Prob > F{col 67}= {res}    0.2136
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1} improvement{col 14}{c |} Odds ratio{col 26}   Std. err.{col 38}      t{col 46}   P>|t|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+intervention {c |}{col 14}{res}{space 2} 1.304827{col 26}{space 2} .2790489{col 37}{space 1}    1.24{col 46}{space 3}0.214{col 54}{space 4} .8578295{col 67}{space 3} 1.984747
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .8820951{col 26}{space 2} .1289891{col 37}{space 1}   -0.86{col 46}{space 3}0.391{col 54}{space 4} .6622441{col 67}{space 3} 1.174932
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 6 2}Note: {bf:_cons} estimates baseline odds{txt}.{p_end}
+{res}{txt}
+{com}. 
+. //closing the log file
+. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\komal\OneDrive\Desktop\Advanced Epidemiology\Lab5_KomalBhosle_Missingdata_log.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res} 9 Nov 2025, 14:22:16
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}

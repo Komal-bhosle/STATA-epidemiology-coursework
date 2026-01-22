@@ -1,0 +1,74 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\komal\OneDrive\Desktop\Advanced Epidemiology\Lab5_KomalBhosle_Full_Missingdata_log.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res} 9 Nov 2025, 14:31:17
+
+{com}. sum
+
+{txt}    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 10}id {c |}{res}      1,000       500.5    288.8194          1       1000
+{txt}intervention {c |}{res}      1,000          .5    .5002502          0          1
+{txt}{space 3}age_group {c |}{res}      1,000          .5    .5002502          0          1
+{txt}{space 1}improvement {c |}{res}      1,000          .5    .5002502          0          1
+{txt}days_enrol~d {c |}{res}      1,000      19.531    2.816198          8         34
+{txt}{hline 13}{c +}{hline 57}
+{space 3}weight_lb {c |}{res}      1,000     158.953    14.87575         99        229
+
+{com}. logistic improvement intervention
+{res}
+{txt}{col 1}Logistic regression{col 57}{lalign 13:Number of obs}{col 70} = {res}{ralign 6:1,000}
+{txt}{col 57}{lalign 13:LR chi2({res:1})}{col 70} = {res}{ralign 6:7.75}
+{txt}{col 57}{lalign 13:Prob > chi2}{col 70} = {res}{ralign 6:0.0054}
+{txt}{col 1}{lalign 14:Log likelihood}{col 15} = {res}{ralign 10:-689.27017}{txt}{col 57}{lalign 13:Pseudo R2}{col 70} = {res}{ralign 6:0.0056}
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1} improvement{col 14}{c |} Odds ratio{col 26}   Std. err.{col 38}      z{col 46}   P>|z|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+intervention {c |}{col 14}{res}{space 2} 1.423207{col 26}{space 2} .1807242{col 37}{space 1}    2.78{col 46}{space 3}0.005{col 54}{space 4} 1.109633{col 67}{space 3} 1.825395
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .8382353{col 26}{space 2}  .075266{col 37}{space 1}   -1.97{col 46}{space 3}0.049{col 54}{space 4} .7029682{col 67}{space 3} .9995309
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 6 2}Note: {bf:_cons} estimates baseline odds{txt}.{p_end}
+
+{com}. 
+. logistic improvement intervention if age_group==0
+{res}
+{txt}{col 1}Logistic regression{col 57}{lalign 13:Number of obs}{col 70} = {res}{ralign 6:500}
+{txt}{col 57}{lalign 13:LR chi2({res:1})}{col 70} = {res}{ralign 6:1.80}
+{txt}{col 57}{lalign 13:Prob > chi2}{col 70} = {res}{ralign 6:0.1802}
+{txt}{col 1}{lalign 14:Log likelihood}{col 15} = {res}{ralign 9:-345.6714}{txt}{col 57}{lalign 13:Pseudo R2}{col 70} = {res}{ralign 6:0.0026}
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1} improvement{col 14}{c |} Odds ratio{col 26}   Std. err.{col 38}      z{col 46}   P>|z|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+intervention {c |}{col 14}{res}{space 2} 1.271304{col 26}{space 2}  .227893{col 37}{space 1}    1.34{col 46}{space 3}0.181{col 54}{space 4} .8946719{col 67}{space 3} 1.806489
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .8914729{col 26}{space 2} .1143298{col 37}{space 1}   -0.90{col 46}{space 3}0.370{col 54}{space 4}  .693335{col 67}{space 3} 1.146234
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 6 2}Note: {bf:_cons} estimates baseline odds{txt}.{p_end}
+
+{com}. 
+. logistic improvement intervention if age_group==1
+{res}
+{txt}{col 1}Logistic regression{col 57}{lalign 13:Number of obs}{col 70} = {res}{ralign 6:500}
+{txt}{col 57}{lalign 13:LR chi2({res:1})}{col 70} = {res}{ralign 6:6.74}
+{txt}{col 57}{lalign 13:Prob > chi2}{col 70} = {res}{ralign 6:0.0094}
+{txt}{col 1}{lalign 14:Log likelihood}{col 15} = {res}{ralign 10:-343.20163}{txt}{col 57}{lalign 13:Pseudo R2}{col 70} = {res}{ralign 6:0.0097}
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1} improvement{col 14}{c |} Odds ratio{col 26}   Std. err.{col 38}      z{col 46}   P>|z|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+intervention {c |}{col 14}{res}{space 2} 1.593576{col 26}{space 2}  .287086{col 37}{space 1}    2.59{col 46}{space 3}0.010{col 54}{space 4} 1.119508{col 67}{space 3} 2.268394
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .7902098{col 26}{space 2} .0994615{col 37}{space 1}   -1.87{col 46}{space 3}0.061{col 54}{space 4} .6174531{col 67}{space 3} 1.011302
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 6 2}Note: {bf:_cons} estimates baseline odds{txt}.{p_end}
+
+{com}. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\komal\OneDrive\Desktop\Advanced Epidemiology\Lab5_KomalBhosle_Full_Missingdata_log.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res} 9 Nov 2025, 14:31:57
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}
